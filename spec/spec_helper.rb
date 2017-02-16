@@ -16,7 +16,7 @@ end
 
 unless ENV.fetch('DEBUG', 'false') == 'true'
   path = DEnv.gem_root.join('spec/spec.log')
-  FileUtils.rm path
+  FileUtils.rm_f path
   DEnv.logger = Logger.new path
 end
 
