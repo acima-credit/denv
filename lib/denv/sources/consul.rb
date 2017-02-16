@@ -39,7 +39,7 @@ class DEnv
 
       def json_response
         response = get_response
-        return [] unless response.code.to_i == 200
+        return [] unless response && response.code.to_i == 200
 
         MultiJson.load response.body
       rescue Exception => e
@@ -48,11 +48,22 @@ class DEnv
       end
 
       def get_response
-        http         = Net::HTTP.new uri.host, uri.port
-        http.use_ssl = uri.scheme == 'https'
-        request      = Net::HTTP::Get.new uri.request_uri
-        request.basic_auth options[:user], options.fetch(:password, '') if options[:user]
-        http.request request
+        http_client.request http_request
+      rescue Errno::ECONNREFUSED, Net::OpenTimeout
+        return nil
+      end
+
+      def http_request
+        Net::HTTP::Get.new(uri.request_uri).tap do |request|
+          user, password = options[:user], options.fetch(:password, '')
+          request.basic_auth user, password if user
+        end
+      end
+
+      def http_client
+        Net::HTTP.new(uri.host, uri.port).tap do |http|
+          http.use_ssl = uri.scheme == 'https'
+        end
       end
 
       def uri

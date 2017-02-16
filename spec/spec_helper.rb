@@ -15,7 +15,9 @@ RSpec.configure do |config|
 end
 
 unless ENV.fetch('DEBUG', 'false') == 'true'
-  DEnv.logger = Logger.new(DEnv.gem_root.join('spec/spec.log'))
+  path = DEnv.gem_root.join('spec/spec.log')
+  FileUtils.rm path
+  DEnv.logger = Logger.new path
 end
 
 require 'support/helpers'
