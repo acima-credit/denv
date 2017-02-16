@@ -22,6 +22,8 @@ class DEnv
       alias :[] :get
 
       def set(entry)
+        return false if entry.invalid?
+
         found = get entry.key
         return false if found && found.eql?(entry)
 
