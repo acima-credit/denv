@@ -1,0 +1,14 @@
+image: 'jruby:9-alpine'
+
+cache:
+  paths:
+    - vendor/bundle
+
+before_script:
+  - ruby -v
+  - bundle install --jobs $(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1)
+                   --path vendor/bundle --deployment --quiet
+                   --binstubs --without production
+test:
+  script:
+    - bundle exec rake spec

@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'denv'
+require 'irb'
+
+def env
+  @env ||= DEnv
+end
+
+IRB.start(__FILE__)
+
