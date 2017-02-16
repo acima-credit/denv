@@ -47,6 +47,7 @@ class DEnv
   end
 
   def self.from_file(filename, root = nil, _caller = caller)
+    from_env
     add Sources::File.new(filename, root, _caller)
   end
 
