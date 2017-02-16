@@ -20,4 +20,3 @@ end
 
 require 'support/helpers'
 require 'support/vcr'
-require 'support/coverage'

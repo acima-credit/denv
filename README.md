@@ -1,4 +1,4 @@
-# DEnv
+# DEnv [![Build Status](https://travis-ci.org/acima-credit/denv.svg?branch=master)](https://travis-ci.org/acima-credit/denv)
 
 Loads environment variables from `.env` files and network services into `ENV`.
 
