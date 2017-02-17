@@ -17,16 +17,22 @@ class DEnv
       sources.clear
     end
 
+    def results
+      Changes::Results.new
+    end
+
     def changes
-      ChangeSet.new.to_hash
+      results.to_hash
+    end
+
+    def changes_ary
+      results.to_a
     end
 
     def env!
-      changes.tap do |hsh|
-        hsh.each do |k, v|
-          logger.debug 'DEnv : env! | %-15.15s : %s' % [k, v]
-          ENV[k] = v
-        end
+      changes.each do |k, v|
+        logger.debug 'DEnv : env!                      |      : %-15.15s : %s' % [k, v]
+        ENV[k] = v
       end
     end
 

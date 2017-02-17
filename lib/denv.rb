@@ -9,5 +9,8 @@ require 'denv/sources/env'
 require 'denv/sources/file'
 require 'denv/sources/consul'
 
-require 'denv/change_set'
+require 'denv/changes/entry'
+require 'denv/changes/set'
+require 'denv/changes/results'
+
 require 'denv/denv'

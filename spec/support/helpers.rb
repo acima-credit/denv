@@ -78,11 +78,15 @@ module EnvSpecHelpers
 
   around(:each) do |example|
     $old_env = ENV.each_with_object({}) { |(k, v), h| h[k] = v }
+    # DEnv.logger.debug 'EnvSpecHelpers : before : 1 : $old_env : %s' % $old_env.inspect
     ENV.clear
     new_env.each { |k, v| ENV[k.to_s] = v.to_s }
+    # DEnv.logger.debug 'EnvSpecHelpers : before : 2 : ENV      : %s' % ENV.inspect
     example.run
+    # DEnv.logger.debug 'EnvSpecHelpers : after  : 3 : ENV      : %s' % ENV.inspect
     ENV.clear
     $old_env.each { |k, v| ENV[k] = v }
+    # DEnv.logger.debug 'EnvSpecHelpers : after  : 4 : ENV      : %s' % ENV.inspect
   end
 
 end

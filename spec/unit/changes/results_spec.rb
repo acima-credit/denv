@@ -1,0 +1,24 @@
+require 'spec_helper'
+
+class DEnv
+  class Changes
+    RSpec.describe Results, :unit, :clean_env do
+      include EnvSpecHelpers
+      let(:env_path) { '../../envs/a/.env' }
+      let(:local_path) { '../../envs/a/.local.env' }
+      context 'both .env and .local.env files' do
+        let(:new_env) { { 'A' => '1' } }
+        let(:exp_changes) { { 'B' => '3', 'C' => '5' } }
+        let(:exp_env) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
+        let(:exp_changes_ary) { [%w(B 2 f:.env), %w(B 3 f:.local.env), %w(C 5 f:.local.env)] }
+        before { DEnv.from_file(env_path).from_file(local_path) }
+        it 'works' do
+          expect(DEnv.changes).to eq(exp_changes)
+          expect(DEnv.changes_ary).to eq(exp_changes_ary)
+          DEnv.env!
+          expect(ENV.to_hash).to eq(exp_env)
+        end
+      end
+    end
+  end
+end

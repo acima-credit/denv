@@ -6,13 +6,12 @@ RSpec.describe DEnv do
   it('version') { expect(DEnv::VERSION).to eq '0.1.0' }
 
   context 'with', :integration, :clean_env do
-    let(:new_env) { { 'A' => '8', 'D' => '7' } }
-    let(:merged_changes) { new_env.update exp_changes }
+    let(:new_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra' } }
     let(:nv_key) { 'env' }
     let(:env_path) { '../envs/a/.env' }
-    let(:env_key) { "f:#{::File.basename(env_path)}" }
+    let(:env_key) { %[f:#{::File.basename(env_path)}] }
     let(:local_path) { '../envs/a/.local.env' }
-    let(:local_key) { "f:#{::File.basename(local_path)}" }
+    let(:local_key) { %[f:#{::File.basename(local_path)}] }
     let(:consul_args) { ['https://consul.some-domain.com/', 'service/some_app/vars/', { user: 'some_user', password: 'some_password' }] }
     let(:consul_key) { 'c:consul.some-domain.com:service/some_app/vars/' }
 
@@ -22,7 +21,7 @@ RSpec.describe DEnv do
           expect(DEnv.sources.keys).to eq(exp_keys)
           expect(DEnv.changes).to eq(exp_changes)
           DEnv.env!
-          expect(ENV.to_hash).to eq(merged_changes)
+          expect(ENV.to_hash).to eq(exp_env)
         end
       end
       context '.env file' do
@@ -30,18 +29,22 @@ RSpec.describe DEnv do
         before { DEnv.from_file(env_path) }
         let(:exp_keys) { [nv_key, env_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
+        let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '2' } }
         it_behaves_like 'a valid setup and update'
       end
       context '.local.env file' do
         before { DEnv.from_file(local_path) }
         let(:exp_keys) { [nv_key, local_key] }
         let(:exp_changes) { { 'B' => '3', 'C' => '5' } }
+        let(:exp_env) { {} }
+        let(:exp_env) { new_env.update exp_changes }
         it_behaves_like 'a valid setup and update'
       end
       context 'both .env and .local.env files' do
         before { DEnv.from_file(env_path).from_file(local_path) }
         let(:exp_keys) { [nv_key, env_key, local_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
+        let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid setup and update'
       end
     end
@@ -50,37 +53,42 @@ RSpec.describe DEnv do
       shared_examples 'a valid update!' do
         it('works') do
           expect(DEnv.sources.keys).to eq(exp_keys)
-          expect(ENV.to_hash).to eq(merged_changes)
+          expect(ENV.to_hash).to eq(exp_env)
         end
       end
       context '.env file' do
         before { DEnv.from_file!(env_path) }
         let(:exp_keys) { [nv_key, env_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
+        let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '2' } }
         it_behaves_like 'a valid update!'
       end
       context '.local.env file' do
         before { DEnv.from_file!(local_path) }
         let(:exp_keys) { [nv_key, local_key] }
         let(:exp_changes) { { 'B' => '3', 'C' => '5' } }
+        let(:exp_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid update!'
       end
       context 'consul', :vcr do
         before { DEnv.from_consul!(*consul_args) }
         let(:exp_keys) { [nv_key, consul_key] }
         let(:exp_changes) { { 'A' => '7', 'D' => '9' } }
+        let(:exp_env) { { 'A' => '7', 'D' => '9', 'E' => 'extra' } }
         it_behaves_like 'a valid update!'
       end
       context 'both .env and .local.env files' do
         before { DEnv.from_file(env_path).from_file!(local_path) }
         let(:exp_keys) { [nv_key, env_key, local_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
+        let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid update!'
       end
       context 'both .env and .local.env files and consul', :vcr do
         before { DEnv.from_file(env_path).from_file(local_path).from_consul!(*consul_args) }
         let(:exp_keys) { [nv_key, env_key, local_key, consul_key] }
         let(:exp_changes) { { 'A' => '7', 'B' => '3', 'C' => '5', 'D' => '9' } }
+        let(:exp_env) { { 'A' => '7', 'D' => '9', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid update!'
       end
     end
