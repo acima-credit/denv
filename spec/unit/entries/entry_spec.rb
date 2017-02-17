@@ -32,6 +32,13 @@ class DEnv
           it { expect(subject).to be_valid }
           it { expect(subject).to_not be_invalid }
         end
+        context 'cleaned key and value' do
+          subject { described_class.new " #{key} ", " '#{value}' " }
+          it { expect(subject.key).to eq key }
+          it { expect(subject.value).to eq value }
+          it { expect(subject).to be_valid }
+          it { expect(subject).to_not be_invalid }
+        end
       end
       context 'invalid' do
         context 'commented out' do

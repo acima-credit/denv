@@ -8,8 +8,8 @@ class DEnv
       alias :hash :key
 
       def initialize(key, value, time = Time.now)
-        @key   = key.to_s.strip
-        @value = value.to_s.strip
+        @key   = clean_key key
+        @value = clean_value value
         @time  = time
       end
 
@@ -27,6 +27,28 @@ class DEnv
 
       def invalid?
         key.empty? || key[0,1] == '#'
+      end
+
+      private
+
+      def clean_key(key)
+        key.to_s.strip
+      end
+
+      def clean_value(value)
+        str = value.to_s.strip
+
+        case str[0,1]
+          when "'", '"', '`'
+            str[0] = ''
+        end
+
+        case str[-1,1]
+          when "'", '"', '`'
+            str[-1] = ''
+        end
+
+        str
       end
 
     end
