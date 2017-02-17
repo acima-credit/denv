@@ -12,7 +12,7 @@ class DEnv
       let(:options) { { user: 'some_user', password: 'some_password' } }
       subject { described_class.new url, path, options }
       let(:exp_type) { 'consul' }
-      let(:exp_key) { 'consul:consul.some-domain.com:service/some_app/vars/' }
+      let(:exp_key) { 'c:consul.some-domain.com:service/some_app/vars/' }
 
       context 'authorized' do
         let(:exp_hsh) { { 'A' => '7', 'D' => '9' } }

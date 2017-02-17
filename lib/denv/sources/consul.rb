@@ -22,7 +22,7 @@ class DEnv
       end
 
       def key
-        "#{type}:#{uri.host}:#{path}"
+        "#{type[0,1]}:#{uri.host}:#{path}"
       end
 
       private

@@ -5,7 +5,7 @@ class DEnv
       include Enumerable
       extend Forwardable
 
-      def_delegators :@all, :keys, :values, :clear, :size
+      def_delegators :@all, :key?, :keys, :values, :clear, :size
       def_delegators :values, :each
 
       def initialize
@@ -13,7 +13,7 @@ class DEnv
       end
 
       def add(source)
-        return false if @all.key? source.key
+        return false if key? source.key
 
         @all[source.key] = source
       end

@@ -10,11 +10,11 @@ RSpec.describe DEnv do
     let(:merged_changes) { new_env.update exp_changes }
     let(:nv_key) { 'env' }
     let(:env_path) { '../envs/a/.env' }
-    let(:env_key) { "file:#{env_path}" }
+    let(:env_key) { "f:#{::File.basename(env_path)}" }
     let(:local_path) { '../envs/a/.local.env' }
-    let(:local_key) { "file:#{local_path}" }
+    let(:local_key) { "f:#{::File.basename(local_path)}" }
     let(:consul_args) { ['https://consul.some-domain.com/', 'service/some_app/vars/', { user: 'some_user', password: 'some_password' }] }
-    let(:consul_key) { 'consul:consul.some-domain.com:service/some_app/vars/' }
+    let(:consul_key) { 'c:consul.some-domain.com:service/some_app/vars/' }
 
     context 'change and update' do
       shared_examples 'a valid setup and update' do

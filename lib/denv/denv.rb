@@ -23,7 +23,10 @@ class DEnv
 
     def env!
       changes.tap do |hsh|
-        hsh.each { |k, v| ENV[k] = v }
+        hsh.each do |k, v|
+          logger.debug 'DEnv : env! | %-15.15s : %s' % [k, v]
+          ENV[k] = v
+        end
       end
     end
 
@@ -37,7 +40,7 @@ class DEnv
     end
 
     def logger
-      @logger ||= Logger.new STDOUT
+      @logger ||= Logger.new(STDOUT).tap { |x| x.level = Logger::INFO }
     end
 
     attr_writer :logger

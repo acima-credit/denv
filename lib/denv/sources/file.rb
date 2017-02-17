@@ -16,7 +16,7 @@ class DEnv
       end
 
       def key
-        "#{type}:#{filename}"
+        "#{type[0,1]}:#{::File.basename(filename)}"
       end
 
       private
