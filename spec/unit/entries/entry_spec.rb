@@ -32,12 +32,24 @@ class DEnv
           it { expect(subject).to be_valid }
           it { expect(subject).to_not be_invalid }
         end
-        context 'cleaned key and value' do
-          subject { described_class.new " #{key} ", " '#{value}' " }
-          it { expect(subject.key).to eq key }
-          it { expect(subject.value).to eq value }
-          it { expect(subject).to be_valid }
-          it { expect(subject).to_not be_invalid }
+        context 'cleaning' do
+          context 'empty ends' do
+            subject { described_class.new " #{key} ", " #{value} " }
+            it { expect(subject.key).to eq key }
+            it { expect(subject.value).to eq value }
+          end
+          context 'expand new lines' do
+            let(:value) { "A\nB\r\nC" }
+            subject { described_class.new key, 'A\\nB\\r\\nC' }
+            it { expect(subject.key).to eq key }
+            it { expect(subject.value).to eq value }
+          end
+          context 'unescape characters' do
+            let(:value) { 'S0me#alu3' }
+            subject { described_class.new key, "S0me\#alu3" }
+            it { expect(subject.key).to eq key }
+            it { expect(subject.value).to eq value }
+          end
         end
       end
       context 'invalid' do
