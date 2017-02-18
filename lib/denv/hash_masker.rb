@@ -26,26 +26,17 @@ class DEnv
       end
     end
 
-    def mask_value(value)
-      case value.size
-        when 0
-          value
-        when 1..4
-          mask_string value, value.size
-        when 5..10
-          mask_string value, 2
-        when 11..30
-          mask_string value, 3
+    def mask_value(value, size = value.size)
+      case size
+        when 0..4
+          '*' * size
+        when 5..6
+          mask = '*' * (value.size - 2)
+          value[0, 1] + mask + value[-1, 1]
         else
-          mask_string value, value.size / 10
+          mask = '*' * (value.size - 4)
+          value[0, 2] + mask + value[-2, 2]
       end
-    end
-
-    def mask_string(value, size)
-      str              = value.dup.to_s
-      str[0, size]     = '*' * size
-      str[-size, size] = '*' * size
-      str
     end
 
   end
