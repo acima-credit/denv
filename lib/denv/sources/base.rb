@@ -5,7 +5,7 @@ class DEnv
       include Enumerable
       extend Forwardable
 
-      def_delegators :entries, :values, :clear, :to_hash
+      def_delegators :entries, :values, :clear, :to_hash, :to_safe_hash
       def_delegators :values, :each
 
       def initialize

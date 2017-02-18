@@ -25,6 +25,10 @@ class DEnv
       results.to_hash
     end
 
+    def safe_changes(*patterns)
+      results.to_safe_hash *patterns
+    end
+
     def changes_ary
       results.to_a
     end

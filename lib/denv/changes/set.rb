@@ -18,6 +18,10 @@ class DEnv
         each_with_object({}) { |entry, hsh| hsh[entry.key] = entry.value }
       end
 
+      def to_safe_hash(*patterns)
+        HashMasker.mask to_hash, *patterns
+      end
+
       def to_a
         each_with_object([]) { |entry, ary| ary << entry.to_a }
       end

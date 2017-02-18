@@ -4,13 +4,17 @@ class DEnv
 
       extend Forwardable
 
-      def_delegators :values, :to_hash, :to_a
+      def_delegators :values, :to_hash, :to_safe_hash, :to_a
 
       attr_reader :values
 
       def initialize
         set_originals
         set_changes
+      end
+
+      def self.to_hash
+        new.to_hash
       end
 
       private

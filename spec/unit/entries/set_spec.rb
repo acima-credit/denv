@@ -12,6 +12,7 @@ class DEnv
         it { expect(subject['A']).to eq entries.first }
         it { expect(subject.get('B')).to eq entries.last }
         it { expect(subject.to_hash).to eq({ 'A' => '1', 'B' => '2' }) }
+        it { expect(subject.to_safe_hash('B')).to eq({ 'A' => '1', 'B' => '*' }) }
         it { expect(subject.to_s).to eq '#<DEnv::Entries::Set keys=2>' }
         it { expect(subject.inspect).to eq '#<DEnv::Entries::Set keys=2>' }
       end

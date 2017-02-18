@@ -105,5 +105,16 @@ RSpec.describe DEnv do
         end
       end
     end
+
+    context 'safe changes' do
+      before { DEnv.from_file!(env_path) }
+      let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
+      let(:exp_safe_changes) { { 'A' => '*', 'B' => '2' } }
+      it 'works' do
+        expect(DEnv.safe_changes('a')).to eq(exp_safe_changes)
+        expect(DEnv.changes).to eq(exp_changes)
+        expect(DEnv.safe_changes('a')).to eq(exp_safe_changes)
+      end
+    end
   end
 end

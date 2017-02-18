@@ -1,5 +1,7 @@
 require 'denv/version'
 
+require 'denv/hash_masker'
+
 require 'denv/entries/entry'
 require 'denv/entries/set'
 

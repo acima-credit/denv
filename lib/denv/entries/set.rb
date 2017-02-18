@@ -36,6 +36,10 @@ class DEnv
         values.each_with_object({}) { |e, h| h[e.key] = e.value }
       end
 
+      def to_safe_hash(*patterns)
+        HashMasker.mask to_hash, *patterns
+      end
+
       def to_s
         %{#<#{self.class.name} keys=#{size}>}
       end
