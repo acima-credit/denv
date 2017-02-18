@@ -22,8 +22,12 @@ class DEnv
       private
 
       def set_entries
-        return false unless path.exist?
+        unless path.exist?
+          DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "could not find #{path}"]
+          return false
+        end
 
+        DEnv.logger.debug 'DEnv : source  : %-15.15s | %s' % [key, "found #{path}"]
         lines.each do |line|
           k, v = line.split '='
           add k, v

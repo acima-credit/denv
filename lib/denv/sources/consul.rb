@@ -43,13 +43,17 @@ class DEnv
 
         MultiJson.load response.body
       rescue Exception => e
-        DEnv.logger.error "Exception: #{e.class.name} : #{e.message}\n  #{e.backtrace[0, 5].join("\n  ")}"
+        DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "Exception: #{e.class.name} : #{e.message}\n  #{e.backtrace[0, 5].join("\n  ")}"]
         return []
       end
 
       def get_response
         http_client.request http_request
-      rescue Errno::ECONNREFUSED, Net::OpenTimeout
+      rescue Errno::ECONNREFUSED
+        DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "could not connect to #{uri}"]
+        return nil
+      rescue Net::OpenTimeout
+        DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "timed out trying to connect to #{uri}"]
         return nil
       end
 
