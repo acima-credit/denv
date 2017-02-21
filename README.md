@@ -66,6 +66,47 @@ DEnv.from_file('../.env').from_file('../.local.env').env!
 DEnv.from_file('../.env').from_file!('../.local.env')
 ```
   
+### Can I make it reload?
+
+Yes, you can! This will reload from known sources and update ENV:
+ 
+ ```ruby
+DEnv.reload.env!
+# or alternatively
+DEnv.reload!
+```
+
+### What if I'm really clever?
+  
+Yes, you can use the newly found environment variables for the next step. Something like:
+ 
+```ruby
+DEnv.from_file('../.env').from_file!('../.local.env')
+DEnv.from_consul!(ENV['CONSUL_URL'], ENV['CONSUL_PATH'])
+```
+
+You might be pushing it but if that is your thing, go ahead! 
+
+### Can I make it reload periodically!
+
+Sure you can! You will need something like [concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby)
+and do something like this:
+
+```ruby
+require 'concurrent'
+Concurrent::TimerTask.new(execution_interval: 5, timeout_interval: 5) do
+  DEnv.reload!
+end
+```
+
+Or you can use our little ext (not loaded by default):
+
+```ruby
+# reload ENV every 30 seconds
+require 'denv/periodical'
+DEnv.reload_periodically! 30 
+```
+  
 ### What about consul?
 
 You can connect to [Consul](https://www.consul.io/) and grab all the key/value pairs in one folder like so:
@@ -80,17 +121,6 @@ DEnv.from_consul!(url, path, options)
 ```
 Please note the pattern that the `url` has an ending `/` and  that the `path` does not start with a `/` 
 or has the `v1/kv/` prefix.
-  
-### What if I'm really clever?
-  
-Yes, you can use the newly found environment variables for the next step. Something like:
- 
-```ruby
-DEnv.from_file('../.env').from_file!('../.local.env')
-DEnv.from_consul!(ENV['CONSUL_URL'], ENV['CONSUL_PATH'])
-```
-
-You might be pushing it but if that is your thing, go ahead! 
 
 ## Development
 
