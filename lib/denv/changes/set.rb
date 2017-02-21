@@ -10,6 +10,10 @@ class DEnv
         __getobj__
       end
 
+      def key?(key)
+        values.any? { |x| x.key == key.to_s }
+      end
+
       def set(entry)
         values << entry
       end

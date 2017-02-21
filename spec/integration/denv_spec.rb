@@ -106,6 +106,23 @@ RSpec.describe DEnv do
       end
     end
 
+    context 'reload! and reload! and reload!' do
+      let(:new_env) { { 'B' => '0' } }
+      let(:changes) { new_env.update 'B' => '2' }
+      let(:env_path) { '../envs/b/.env' }
+      let(:local_path) { '../envs/b/.local.env' }
+      it 'works' do
+        DEnv.from_file(env_path).from_file!(local_path)
+        expect(ENV.to_hash).to eq(changes)
+        DEnv.reload!
+        expect(ENV.to_hash).to eq(changes)
+        DEnv.reload!
+        expect(ENV.to_hash).to eq(changes)
+        DEnv.reload!
+        expect(ENV.to_hash).to eq(changes)
+      end
+    end
+
     context 'safe changes' do
       before { DEnv.from_file(env_path) }
       let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
