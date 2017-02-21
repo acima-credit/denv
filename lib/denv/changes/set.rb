@@ -15,6 +15,14 @@ class DEnv
       end
 
       def set(entry)
+        key?(entry.key) ? replace(entry) : add(entry)
+      end
+
+      def replace(entry)
+        values.each_with_index { |e, i| values[i] = entry if entry.key == e.key }
+      end
+
+      def add(entry)
         values << entry
       end
 
