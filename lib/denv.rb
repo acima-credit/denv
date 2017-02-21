@@ -7,7 +7,6 @@ require 'denv/entries/set'
 
 require 'denv/sources/set'
 require 'denv/sources/base'
-require 'denv/sources/env'
 require 'denv/sources/file'
 require 'denv/sources/consul'
 

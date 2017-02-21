@@ -27,14 +27,14 @@ RSpec.describe DEnv do
       context '.env file' do
 
         before { DEnv.from_file(env_path) }
-        let(:exp_keys) { [nv_key, env_key] }
+        let(:exp_keys) { [env_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
         let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '2' } }
         it_behaves_like 'a valid setup and update'
       end
       context '.local.env file' do
         before { DEnv.from_file(local_path) }
-        let(:exp_keys) { [nv_key, local_key] }
+        let(:exp_keys) { [local_key] }
         let(:exp_changes) { { 'B' => '3', 'C' => '5' } }
         let(:exp_env) { {} }
         let(:exp_env) { new_env.update exp_changes }
@@ -42,7 +42,7 @@ RSpec.describe DEnv do
       end
       context 'both .env and .local.env files' do
         before { DEnv.from_file(env_path).from_file(local_path) }
-        let(:exp_keys) { [nv_key, env_key, local_key] }
+        let(:exp_keys) { [env_key, local_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
         let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid setup and update'
@@ -58,35 +58,35 @@ RSpec.describe DEnv do
       end
       context '.env file' do
         before { DEnv.from_file!(env_path) }
-        let(:exp_keys) { [nv_key, env_key] }
+        let(:exp_keys) { [env_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
         let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '2' } }
         it_behaves_like 'a valid update!'
       end
       context '.local.env file' do
         before { DEnv.from_file!(local_path) }
-        let(:exp_keys) { [nv_key, local_key] }
+        let(:exp_keys) { [local_key] }
         let(:exp_changes) { { 'B' => '3', 'C' => '5' } }
         let(:exp_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid update!'
       end
       context 'consul', :vcr do
         before { DEnv.from_consul!(*consul_args) }
-        let(:exp_keys) { [nv_key, consul_key] }
+        let(:exp_keys) { [consul_key] }
         let(:exp_changes) { { 'A' => '7', 'D' => '9' } }
         let(:exp_env) { { 'A' => '7', 'D' => '9', 'E' => 'extra' } }
         it_behaves_like 'a valid update!'
       end
       context 'both .env and .local.env files' do
         before { DEnv.from_file(env_path).from_file!(local_path) }
-        let(:exp_keys) { [nv_key, env_key, local_key] }
+        let(:exp_keys) { [env_key, local_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
         let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid update!'
       end
       context 'both .env and .local.env files and consul', :vcr do
         before { DEnv.from_file(env_path).from_file(local_path).from_consul!(*consul_args) }
-        let(:exp_keys) { [nv_key, env_key, local_key, consul_key] }
+        let(:exp_keys) { [env_key, local_key, consul_key] }
         let(:exp_changes) { { 'A' => '7', 'B' => '3', 'C' => '5', 'D' => '9' } }
         let(:exp_env) { { 'A' => '7', 'D' => '9', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
         it_behaves_like 'a valid update!'

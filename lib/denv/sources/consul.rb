@@ -78,7 +78,6 @@ class DEnv
   end
 
   def self.from_consul(url, path, options = {})
-    from_env
     sources.add Sources::Consul.new(url, path, options)
   end
 
