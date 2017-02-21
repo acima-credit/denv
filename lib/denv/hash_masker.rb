@@ -22,11 +22,11 @@ class DEnv
     def mask_hash(hash, patterns)
       hash.each_with_object({}) do |(k, v), h|
         ptrn = patterns.find { |x| k =~ x }
-        h[k] = ptrn ? mask_value(v) : v
+        h[k] = ptrn ? self.class.mask_value(v) : v
       end
     end
 
-    def mask_value(value, size = value.size)
+    def self.mask_value(value, size = value.size)
       case size
         when 0..4
           '*' * size

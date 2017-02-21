@@ -35,7 +35,11 @@ class DEnv
 
     def env!
       changes.each do |k, v|
-        logger.debug 'DEnv : env!                      |      : %-15.15s : %s' % [k, v]
+        if logger.level >= Logger::INFO
+          logger.info 'DEnv : env!                      |      : %-15.15s : %s' % [k, HashMasker.mask_value(v)]
+        else
+          logger.debug 'DEnv : env!                      |      : %-15.15s : %s' % [k, v]
+        end
         ENV[k] = v
       end
     end
