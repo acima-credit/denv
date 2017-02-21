@@ -34,13 +34,9 @@ class DEnv
     end
 
     def env!
-      changes.each do |k, v|
-        if logger.level >= Logger::INFO
-          logger.info 'DEnv : env!                      |      : %-15.15s : %s' % [k, HashMasker.mask_value(v)]
-        else
-          logger.debug 'DEnv : env!                      |      : %-15.15s : %s' % [k, v]
-        end
-        ENV[k] = v
+      results.each do |entry|
+        log_env_change entry
+        ENV[entry.key] = entry.value
       end
     end
 
@@ -64,6 +60,16 @@ class DEnv
     def add(source)
       sources.add(source)
       self
+    end
+
+    def log_env_change(entry)
+      level = :debug
+      values = [entry.origin, entry.key, entry.value]
+      if logger.level >= Logger::INFO
+        level = :info
+        values[2] = entry.masked_value
+      end
+      logger.send level, ('DEnv : env! | %-10.10s : %s = %s' % values)
     end
 
   end

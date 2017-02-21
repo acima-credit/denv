@@ -4,7 +4,7 @@ class DEnv
 
       extend Forwardable
 
-      def_delegators :values, :to_hash, :to_safe_hash, :to_a
+      def_delegators :values, :each, :to_hash, :to_safe_hash, :to_a
 
       attr_reader :values
 

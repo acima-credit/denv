@@ -14,12 +14,15 @@ RSpec.configure do |config|
   config.expect_with(:rspec) { |c| c.syntax = :expect }
 end
 
-if ENV.fetch('DEBUG', 'false') == 'true'
-  DEnv.logger.level = Logger::DEBUG
-else
-  path = DEnv.gem_root.join('spec/spec.log')
-  FileUtils.rm_f path
-  DEnv.logger = Logger.new path
+case ENV.fetch('DEBUG', 'false')
+  when 'true'
+    DEnv.logger.level = Logger::DEBUG
+  when 'info'
+    DEnv.logger.level = Logger::INFO
+  when 'false'
+    path = DEnv.gem_root.join('spec/spec.log')
+    FileUtils.rm_f path
+    DEnv.logger = Logger.new path
 end
 
 require 'support/helpers'

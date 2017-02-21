@@ -10,6 +10,10 @@ class DEnv
         @origin = origin
       end
 
+      def masked_value
+        HashMasker.mask_value value
+      end
+
       def to_a
         [key, value, origin]
       end
