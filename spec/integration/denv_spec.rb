@@ -107,7 +107,7 @@ RSpec.describe DEnv do
     end
 
     context 'safe changes' do
-      before { DEnv.from_file!(env_path) }
+      before { DEnv.from_file(env_path) }
       let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
       let(:exp_safe_changes) { { 'A' => '*', 'B' => '2' } }
       it 'works' do

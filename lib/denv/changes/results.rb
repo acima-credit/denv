@@ -20,21 +20,29 @@ class DEnv
       private
 
       def set_originals
-        @originals = DEnv.sources.first { |x| x.type == 'env' }.to_hash
+        @originals = ENV.to_hash
       end
 
       def set_changes
         @values = Set.new
 
         DEnv.sources.each do |source|
-          source.to_hash.each do |k, v|
-            entry = Entry.new k, v, source.key
-            found = original_present?(entry)
-            ary   = [entry.origin, (found ? 'skip' : 'add'), entry.key, entry.value]
-            DEnv.logger.debug 'DEnv : changes : %-15.15s | %-4.4s : %-15.15s : %s' % ary
-            values.set entry unless found
-          end
+          next if source.type == 'env'
+
+          source.each { |entry| process_entry source, entry.key, entry.value }
         end
+      end
+
+      def process_entry(source, k, v)
+        entry = Entry.new k, v, source.key
+        found = original_present? entry
+        debug_entry entry, found
+        values.set entry unless found
+      end
+
+      def debug_entry(entry, found)
+        ary = [entry.origin, (found ? 'skip' : 'add'), entry.key, entry.value]
+        DEnv.logger.debug 'DEnv : changes : %-15.15s | %-4.4s : %-15.15s : %s' % ary
       end
 
       def original_present?(entry)

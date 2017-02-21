@@ -41,7 +41,9 @@ class DEnv
     end
 
     def reload
-      sources.each { |x| x.reload }
+      sources.
+        reject { |x| x.type == 'env' }.
+        each { |x| x.reload }
     end
 
     def reload!
@@ -63,10 +65,10 @@ class DEnv
     end
 
     def log_env_change(entry)
-      level = :debug
+      level  = :debug
       values = [entry.origin, entry.key, entry.value]
       if logger.level >= Logger::INFO
-        level = :info
+        level     = :info
         values[2] = entry.masked_value
       end
       logger.send level, ('DEnv : env! | %-10.10s : %s = %s' % values)
