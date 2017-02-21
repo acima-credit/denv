@@ -18,12 +18,8 @@ class DEnv
         key?(entry.key) ? replace(entry) : add(entry)
       end
 
-      def replace(entry)
-        values.each_with_index { |e, i| values[i] = entry if entry.key == e.key }
-      end
-
-      def add(entry)
-        values << entry
+      def clear_from_env
+        values.delete_if { |entry| ENV.key?(entry.key) && entry.value == ENV[entry.key] }
       end
 
       def to_hash
@@ -43,6 +39,16 @@ class DEnv
       end
 
       alias :inspect :to_s
+
+      private
+
+      def replace(entry)
+        values.each_with_index { |e, i| values[i] = entry if entry.key == e.key }
+      end
+
+      def add(entry)
+        values << entry
+      end
 
     end
   end
