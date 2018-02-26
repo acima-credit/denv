@@ -15,7 +15,7 @@ RSpec.describe DEnv do
     let(:consul_args) { ['https://consul.some-domain.com/', 'service/some_app/vars/', { user: 'some_user', password: 'some_password' }] }
     let(:consul_key) { 'c:consul.some-domain.com:service/some_app/vars/' }
 
-    context 'change and update' do
+    context 'change and update always' do
       shared_examples 'a valid setup and update' do
         it('works') do
           expect(DEnv.sources.keys).to eq(exp_keys)
@@ -45,6 +45,30 @@ RSpec.describe DEnv do
         let(:exp_keys) { [env_key, local_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
         let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
+        it_behaves_like 'a valid setup and update'
+      end
+    end
+    
+    context 'change and update only on append', :focus do
+      shared_examples 'a valid setup and update' do
+        it('works') do
+          DEnv.append_env!
+          expect(ENV.to_hash).to eq(exp_env)
+        end
+      end
+      context '.env file' do
+        before { DEnv.from_file(env_path) }
+        let(:exp_env) { new_env.merge 'B' => '2' }
+        it_behaves_like 'a valid setup and update'
+      end
+      context '.local.env file' do
+        before { DEnv.from_file(local_path) }
+        let(:exp_env) { new_env.merge 'B' => '3', 'C' => '5' }
+        it_behaves_like 'a valid setup and update'
+      end
+      context 'both .env and .local.env files' do
+        before { DEnv.from_file(env_path).from_file(local_path) }
+        let(:exp_env) { new_env.merge 'B' => '3', 'C' => '5' }
         it_behaves_like 'a valid setup and update'
       end
     end

@@ -40,6 +40,15 @@ class DEnv
       end
     end
 
+    def append_env!
+      results.each do |entry|
+        next if ENV.key? entry.key
+        
+        log_env_change entry
+        ENV[entry.key] = entry.value
+      end
+    end
+
     def reload
       sources.
         reject { |x| x.type == 'env' }.
