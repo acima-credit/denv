@@ -43,9 +43,15 @@ class DEnv
     def append_env!
       results.each do |entry|
         next if ENV.key? entry.key
-        
+
         log_env_change entry
         ENV[entry.key] = entry.value
+      end
+    end
+
+    def strip_env!
+      ENV.keys.sort.each do |key|
+        ENV[key.strip] = ENV.delete(key).strip
       end
     end
 

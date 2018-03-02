@@ -48,7 +48,7 @@ RSpec.describe DEnv do
         it_behaves_like 'a valid setup and update'
       end
     end
-    
+
     context 'change and update only on append', :focus do
       shared_examples 'a valid setup and update' do
         it('works') do
@@ -155,6 +155,18 @@ RSpec.describe DEnv do
         expect(DEnv.safe_changes('a')).to eq(exp_safe_changes)
         expect(DEnv.changes).to eq(exp_changes)
         expect(DEnv.safe_changes('a')).to eq(exp_safe_changes)
+      end
+    end
+
+    context 'strip_env!' do
+      let(:new_env) { { 'A ' => ' 8', ' D' => '7 ', ' E ' => ' extra ', 'F' => '1' } }
+      before { DEnv.strip_env! }
+      it 'strips keys and values' do
+        expect(ENV.keys.sort).to eq %w(A D E F)
+        expect(ENV['A']).to eq '8'
+        expect(ENV['D']).to eq '7'
+        expect(ENV['E']).to eq 'extra'
+        expect(ENV['F']).to eq '1'
       end
     end
   end
