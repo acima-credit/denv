@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class DEnv
   class Changes
     class Set < SimpleDelegator
-
       def initialize
         super []
       end
@@ -35,10 +36,10 @@ class DEnv
       end
 
       def to_s
-        %{#<DEnv::Changes::Set keys=#{size}>}
+        %(#<DEnv::Changes::Set keys=#{size}>)
       end
 
-      alias :inspect :to_s
+      alias inspect to_s
 
       private
 
@@ -49,7 +50,6 @@ class DEnv
       def add(entry)
         values << entry
       end
-
     end
   end
 end

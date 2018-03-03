@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 class DEnv
@@ -11,7 +13,7 @@ class DEnv
         let(:exp_changes) { { 'B' => '3', 'C' => '5' } }
         let(:exp_safe_changes) { { 'B' => '*', 'C' => '5' } }
         let(:exp_env) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
-        let(:exp_changes_ary) { [%w(B 3 f:.local.env), %w(C 5 f:.local.env)] }
+        let(:exp_changes_ary) { [%w[B 3 f:.local.env], %w[C 5 f:.local.env]] }
         before { DEnv.from_file(env_path).from_file(local_path) }
         it 'works' do
           expect(DEnv.changes).to eq(exp_changes)

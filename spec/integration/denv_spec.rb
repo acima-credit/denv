@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe DEnv do
@@ -9,9 +11,9 @@ RSpec.describe DEnv do
     let(:new_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra' } }
     let(:nv_key) { 'env' }
     let(:env_path) { '../envs/a/.env' }
-    let(:env_key) { %[f:#{::File.basename(env_path)}] }
+    let(:env_key) { %(f:#{::File.basename(env_path)}) }
     let(:local_path) { '../envs/a/.local.env' }
-    let(:local_key) { %[f:#{::File.basename(local_path)}] }
+    let(:local_key) { %(f:#{::File.basename(local_path)}) }
     let(:consul_args) { ['https://consul.some-domain.com/', 'service/some_app/vars/', { user: 'some_user', password: 'some_password' }] }
     let(:consul_key) { 'c:consul.some-domain.com:service/some_app/vars/' }
 
@@ -25,7 +27,6 @@ RSpec.describe DEnv do
         end
       end
       context '.env file' do
-
         before { DEnv.from_file(env_path) }
         let(:exp_keys) { [env_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '2' } }
@@ -162,7 +163,7 @@ RSpec.describe DEnv do
       let(:new_env) { { 'A ' => ' 8', ' D' => '7 ', ' E ' => ' extra ', 'F' => '1' } }
       before { DEnv.strip_env! }
       it 'strips keys and values' do
-        expect(ENV.keys.sort).to eq %w(A D E F)
+        expect(ENV.keys.sort).to eq %w[A D E F]
         expect(ENV['A']).to eq '8'
         expect(ENV['D']).to eq '7'
         expect(ENV['E']).to eq 'extra'

@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class DEnv
   class HashMasker
-
     def self.mask(hsh, *patterns)
       new(hsh, *patterns).result
     end
@@ -28,16 +29,15 @@ class DEnv
 
     def self.mask_value(value, size = value.size)
       case size
-        when 0..4
-          '*' * size
-        when 5..6
-          mask = '*' * (value.size - 2)
-          value[0, 1] + mask + value[-1, 1]
-        else
-          mask = '*' * (value.size - 4)
-          value[0, 2] + mask + value[-2, 2]
+      when 0..4
+        '*' * size
+      when 5..6
+        mask = '*' * (value.size - 2)
+        value[0, 1] + mask + value[-1, 1]
+      else
+        mask = '*' * (value.size - 4)
+        value[0, 2] + mask + value[-2, 2]
       end
     end
-
   end
 end

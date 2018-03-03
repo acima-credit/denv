@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 class DEnv
   class Sources
     class File < Base
-
       attr_reader :filename, :path
 
-      def initialize(filename, root = nil, _caller = caller)
+      def initialize(filename, root = nil, callr = caller)
         @filename = filename
-        root      ||= get_root_from_caller _caller
-        @path     = Pathname.new(root).join filename
+        root ||= get_root_fromcallr callr
+        @path = Pathname.new(root).join filename
         super()
       end
 
@@ -16,18 +17,18 @@ class DEnv
       end
 
       def key
-        "#{type[0,1]}:#{::File.basename(filename)}"
+        "#{type[0, 1]}:#{::File.basename(filename)}"
       end
 
       private
 
       def set_entries
         unless path.exist?
-          DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "could not find #{path}"]
+          DEnv.logger.error format('DEnv : source  : %-15.15s | %s', key, "could not find #{path}")
           return false
         end
 
-        DEnv.logger.debug 'DEnv : source  : %-15.15s | %s' % [key, "found #{path}"]
+        DEnv.logger.debug format('DEnv : source  : %-15.15s | %s', key, "found #{path}")
         lines.each do |line|
           k, v = line.split '='
           add k, v
@@ -39,24 +40,22 @@ class DEnv
       end
 
       def body
-        ::File.open(path, 'rb:bom|utf-8') { |f| f.read }
+        ::File.open(path, 'rb:bom|utf-8', &:read)
       end
 
-      def get_root_from_caller(_caller)
-        base = _caller.first.split(':').first
+      def get_root_fromcallr(callr)
+        base = callr.first.split(':').first
         ::File.dirname ::File.expand_path(base)
       end
-
     end
   end
 
-  def self.from_file(filename, root = nil, _caller = caller)
-    add Sources::File.new(filename, root, _caller)
+  def self.from_file(filename, root = nil, callr = caller)
+    add Sources::File.new(filename, root, callr)
   end
 
-  def self.from_file!(filename, root = nil, _caller = caller)
-    from_file filename, root, _caller
+  def self.from_file!(filename, root = nil, callr = caller)
+    from_file filename, root, callr
     env!
   end
-
 end

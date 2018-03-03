@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/setup'
 require 'denv'
 require 'yaml'
@@ -15,14 +17,14 @@ RSpec.configure do |config|
 end
 
 case ENV.fetch('DEBUG', 'false')
-  when 'true'
-    DEnv.logger.level = Logger::DEBUG
-  when 'info'
-    DEnv.logger.level = Logger::INFO
-  when 'false'
-    path = DEnv.gem_root.join('spec/spec.log')
-    FileUtils.rm_f path
-    DEnv.logger = Logger.new path
+when 'true'
+  DEnv.logger.level = Logger::DEBUG
+when 'info'
+  DEnv.logger.level = Logger::INFO
+when 'false'
+  path = DEnv.gem_root.join('spec/spec.log')
+  FileUtils.rm_f path
+  DEnv.logger = Logger.new path
 end
 
 require 'support/helpers'

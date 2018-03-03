@@ -1,0 +1,20 @@
+AllCops:
+  DisplayCopNames: true
+  Exclude:
+    - "**/*.gemspec"
+  TargetRubyVersion: 2.4
+
+Metrics/LineLength:
+  AllowURI: true
+  Max: 120
+  Exclude:
+    - Gemfile*
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false

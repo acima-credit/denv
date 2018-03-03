@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 begin
   require 'concurrent'
 
@@ -39,5 +41,4 @@ rescue LoadError
       end
     end
   end
-
 end

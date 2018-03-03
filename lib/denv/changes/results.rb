@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class DEnv
   class Changes
     class Results
-
       extend Forwardable
 
       def_delegators :values, :each, :to_hash, :to_safe_hash, :to_a
@@ -36,7 +37,6 @@ class DEnv
       def set_entry(source, entry)
         values.set Entry.new(entry.key, entry.value, source.key)
       end
-
     end
   end
 end

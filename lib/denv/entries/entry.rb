@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 class DEnv
   class Entries
     class Entry
-
       include Comparable
 
       attr_reader :key, :value, :time
-      alias :hash :key
+      alias hash key
 
       def initialize(key, value, time = Time.now)
         @key   = clean_key key
@@ -42,12 +43,11 @@ class DEnv
 
       # unquote, expand newlines, unescape characters
       def clean_value(value)
-        clean_str(value).
-          sub(/\A(['"])(.*)\1\z/, '\2').
-          gsub('\n', "\n").gsub('\r', "\r").
-          gsub(/\\([^$])/, '\1')
+        clean_str(value)
+          .sub(/\A(['"])(.*)\1\z/, '\2')
+          .gsub('\n', "\n").gsub('\r', "\r")
+          .gsub(/\\([^$])/, '\1')
       end
-
     end
   end
 end

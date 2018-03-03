@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 WebMock.disable_net_connect!
 
 VCR.configure do |c|
@@ -10,4 +12,3 @@ VCR.configure do |c|
     http_message.body.encoding.name == 'ASCII-8BIT' || !http_message.body.valid_encoding?
   end
 end
-

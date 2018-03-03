@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'set'
 require 'pathname'
 require 'logger'
 
 class DEnv
   class << self
-
     def gem_root
       @gem_root ||= Pathname.new File.expand_path('../../..', __FILE__)
     end
@@ -68,9 +69,9 @@ class DEnv
     end
 
     def reload
-      sources.
-        reject { |x| x.type == 'env' }.
-        each { |x| x.reload }
+      sources
+        .reject { |x| x.type == 'env' }
+        .each(&:reload)
     end
 
     def reload!
@@ -98,8 +99,7 @@ class DEnv
         level     = :info
         values[2] = entry.masked_value
       end
-      logger.send level, ('DEnv : env! | %-10.10s : %s = %s' % values)
+      logger.send level, format('DEnv : env! | %-10.10s : %s = %s', *values)
     end
-
   end
 end

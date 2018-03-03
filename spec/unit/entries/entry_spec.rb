@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 class DEnv
@@ -64,7 +66,7 @@ class DEnv
           it { expect(subject).to be_invalid }
         end
         context 'empty key' do
-          subject { described_class.new " ", value }
+          subject { described_class.new ' ', value }
           it { expect(subject).to_not be_valid }
           it { expect(subject).to be_invalid }
         end

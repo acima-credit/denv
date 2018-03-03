@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class DEnv
   class Changes
     class Entry
-
       attr_reader :key, :value, :origin
 
       def initialize(key, value, origin)
@@ -22,8 +23,7 @@ class DEnv
         "[CE:#{key}:#{value}:#{origin}]"
       end
 
-      alias :inspect :to_s
-
+      alias inspect to_s
     end
   end
 end

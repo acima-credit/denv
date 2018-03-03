@@ -1,5 +1,6 @@
-module DEnvSpecHelpers
+# frozen_string_literal: true
 
+module DEnvSpecHelpers
   extend RSpec::Core::SharedContext
 
   let(:new_env) { {} }
@@ -21,21 +22,17 @@ RSpec.configure do |config|
     example.run
     DEnv.clear
   end
-
 end
 
 module SourceSpecHelpers
-
   shared_examples 'a valid source' do
     it { expect(subject.type).to eq exp_type }
     it { expect(subject.key).to eq exp_key }
     it { expect(subject.to_hash).to eq(exp_hsh) }
   end
-
 end
 
 module ConsulSpecHelpers
-
   extend RSpec::Core::SharedContext
 
   let(:resp_status) { 200 }
@@ -56,22 +53,20 @@ module ConsulSpecHelpers
   end
 
   let(:unauth_body) do
-    <<-HTML
-<html>
-<head><title>401 Authorization Required</title></head>
-<body bgcolor="white">
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.11.1</center>
-</body>
-</html>
+    <<~HTML
+      <html>
+      <head><title>401 Authorization Required</title></head>
+      <body bgcolor="white">
+      <center><h1>401 Authorization Required</h1></center>
+      <hr><center>nginx/1.11.1</center>
+      </body>
+      </html>
     HTML
   end
   let(:unauth_headers) { { 'Content-Type' => 'text/html' } }
-
 end
 
 module EnvSpecHelpers
-
   extend RSpec::Core::SharedContext
 
   let(:new_env) { {} }
@@ -88,6 +83,4 @@ module EnvSpecHelpers
     $old_env.each { |k, v| ENV[k] = v }
     # DEnv.logger.debug 'EnvSpecHelpers : after  : 4 : ENV      : %s' % ENV.inspect
   end
-
 end
-

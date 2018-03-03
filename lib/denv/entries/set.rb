@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class DEnv
   class Entries
     class Set
-
       include Enumerable
       extend Forwardable
 
@@ -19,7 +20,7 @@ class DEnv
         @all[key.to_s]
       end
 
-      alias :[] :get
+      alias [] get
 
       def set(entry)
         return false if entry.invalid?
@@ -30,7 +31,7 @@ class DEnv
         @all[entry.key] = entry
       end
 
-      alias :[]= :set
+      alias []= set
 
       def to_hash
         values.each_with_object({}) { |e, h| h[e.key] = e.value }
@@ -41,11 +42,10 @@ class DEnv
       end
 
       def to_s
-        %{#<#{self.class.name} keys=#{size}>}
+        %(#<#{self.class.name} keys=#{size}>)
       end
 
-      alias :inspect :to_s
-
+      alias inspect to_s
     end
   end
 end

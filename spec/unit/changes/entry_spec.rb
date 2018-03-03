@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 class DEnv
@@ -10,7 +12,7 @@ class DEnv
       it { expect(subject.key).to eq key }
       it { expect(subject.value).to eq value }
       it { expect(subject.origin).to eq origin }
-      it { expect(subject.to_a).to eq %w{ some_key some_value file:.env } }
+      it { expect(subject.to_a).to eq %w[some_key some_value file:.env] }
       it { expect(subject.to_s).to eq '[CE:some_key:some_value:file:.env]' }
     end
   end

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class DEnv
   class Sources
     class Set
-
       include Enumerable
       extend Forwardable
 
@@ -18,8 +19,7 @@ class DEnv
         @all[source.key] = source
       end
 
-      alias :inspect :to_s
-
+      alias inspect to_s
     end
   end
 end

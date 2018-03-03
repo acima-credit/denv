@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'uri'
 require 'multi_json'
@@ -7,7 +9,6 @@ require 'yaml'
 class DEnv
   class Sources
     class Consul < Base
-
       attr_reader :url, :path, :options
 
       def initialize(url, path, options = {})
@@ -22,7 +23,7 @@ class DEnv
       end
 
       def key
-        "#{type[0,1]}:#{uri.host}:#{path}"
+        "#{type[0, 1]}:#{uri.host}:#{path}"
       end
 
       private
@@ -39,27 +40,30 @@ class DEnv
 
       def json_response
         response = get_response
-        return [] unless response && response.code.to_i == 200
+        return [] unless response&.code.to_i == 200
 
         MultiJson.load response.body
       rescue Exception => e
-        DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "Exception: #{e.class.name} : #{e.message}\n  #{e.backtrace[0, 5].join("\n  ")}"]
+        DEnv.logger.error format('DEnv : source  : %-15.15s | %s',
+                                 key,
+                                 "Exception: #{e.class.name} : #{e.message}\n  #{e.backtrace[0, 5].join("\n  ")}")
         return []
       end
 
       def get_response
         http_client.request http_request
       rescue Errno::ECONNREFUSED
-        DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "could not connect to #{uri}"]
+        DEnv.logger.error format('DEnv : source  : %-15.15s | %s', key, "could not connect to #{uri}")
         return nil
       rescue Net::OpenTimeout
-        DEnv.logger.error 'DEnv : source  : %-15.15s | %s' % [key, "timed out trying to connect to #{uri}"]
+        DEnv.logger.error format('DEnv : source  : %-15.15s | %s', key, "timed out trying to connect to #{uri}")
         return nil
       end
 
       def http_request
         Net::HTTP::Get.new(uri.request_uri).tap do |request|
-          user, password = options[:user], options.fetch(:password, '')
+          user = options[:user]
+          password = options.fetch(:password, '')
           request.basic_auth user, password if user
         end
       end
@@ -73,7 +77,6 @@ class DEnv
       def uri
         @uri ||= URI "#{url}v1/kv/#{path}?recurse"
       end
-
     end
   end
 
@@ -85,5 +88,4 @@ class DEnv
     from_consul url, path, options
     env!
   end
-
 end

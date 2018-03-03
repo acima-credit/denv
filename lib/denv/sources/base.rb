@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class DEnv
   class Sources
     class Base
-
       include Enumerable
       extend Forwardable
 
@@ -35,10 +36,9 @@ class DEnv
       def add(k, v, time = Time.now)
         entry = Entries::Entry.new(k, v, time)
         ary   = [key, (entry.valid? ? 'add' : 'skip'), entry.key, entry.value]
-        DEnv.logger.debug 'DEnv : source  : %-15.15s | %-4.4s : %-15.15s : %s' % ary
+        DEnv.logger.debug format('DEnv : source  : %-15.15s | %-4.4s : %-15.15s : %s', *ary)
         entries.set entry if entry.valid?
       end
-
     end
   end
 end
