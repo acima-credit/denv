@@ -169,5 +169,24 @@ RSpec.describe DEnv do
         expect(ENV['F']).to eq '1'
       end
     end
+
+    context 'list_env' do
+      it 'lists all env vars' do
+        expect(DEnv.list_env).to eq [%w[A 8], %w[D 7], %w[E extra]]
+      end
+    end
+
+    context 'print_env' do
+      let(:result) do
+        <<~RES
+          ENV : "A" : "8"
+          ENV : "D" : "7"
+          ENV : "E" : "extra"
+        RES
+      end
+      it 'prints all env vars' do
+        expect { DEnv.print_env }.to output(result).to_stdout
+      end
+    end
   end
 end

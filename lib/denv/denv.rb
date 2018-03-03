@@ -55,6 +55,18 @@ class DEnv
       end
     end
 
+    def list_env
+      ENV.keys.sort.map { |x| [x, ENV[x]] }
+    end
+
+    def print_env
+      list = list_env
+      max  = list.inject(0) { |t, x| x.first.size > t ? x.first.size : t } + 2
+      list.each do |k, v|
+        puts format("ENV : %-#{max}.#{max}s : %s", k.inspect, v.inspect)
+      end
+    end
+
     def reload
       sources.
         reject { |x| x.type == 'env' }.
