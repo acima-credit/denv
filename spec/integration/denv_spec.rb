@@ -50,7 +50,7 @@ RSpec.describe DEnv do
       end
     end
 
-    context 'change and update only on append', :focus do
+    context 'change and update only on append' do
       shared_examples 'a valid setup and update' do
         it('works') do
           DEnv.append_env!
