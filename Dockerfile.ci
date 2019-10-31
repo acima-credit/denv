@@ -31,7 +31,7 @@ RUN mkdir -p /app
 WORKDIR /app
 
 ADD . /app
-RUN bin/setup
+RUN bundle install
 
 #ENTRYPOINT ["bundle", "exec"]
 #CMD ["rails", "server", "-b", "0.0.0.0"]
