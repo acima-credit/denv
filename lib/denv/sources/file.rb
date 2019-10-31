@@ -30,7 +30,7 @@ class DEnv
 
         DEnv.logger.debug format('DEnv : source  : %-15.15s | %s', key, "found #{path}")
         lines.each do |line|
-          k, v = line.split '='
+          k, v = line.split('=', 2)
           add k, v
         end
       end
