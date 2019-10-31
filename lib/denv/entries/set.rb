@@ -26,7 +26,7 @@ class DEnv
         return false if entry.invalid?
 
         found = get entry.key
-        return false if found && found.eql?(entry)
+        return false if found&.eql?(entry)
 
         @all[entry.key] = entry
       end

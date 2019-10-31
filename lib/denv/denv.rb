@@ -7,7 +7,7 @@ require 'logger'
 class DEnv
   class << self
     def gem_root
-      @gem_root ||= Pathname.new File.expand_path('../../..', __FILE__)
+      @gem_root ||= Pathname.new File.expand_path('../..', __dir__)
     end
 
     def sources
@@ -27,7 +27,7 @@ class DEnv
     end
 
     def safe_changes(*patterns)
-      results.to_safe_hash *patterns
+      results.to_safe_hash(*patterns)
     end
 
     def changes_ary
