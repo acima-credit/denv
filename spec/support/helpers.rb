@@ -20,7 +20,6 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     DEnv.clear
     example.run
-    DEnv.clear
   end
 end
 
@@ -72,15 +71,15 @@ module EnvSpecHelpers
   let(:new_env) { {} }
 
   around(:each) do |example|
-    $old_env = ENV.each_with_object({}) { |(k, v), h| h[k] = v }
-    # DEnv.logger.debug 'EnvSpecHelpers : before : 1 : $old_env : %s' % $old_env.inspect
+    old_env = ENV.each_with_object({}) { |(k, v), h| h[k] = v }
     ENV.clear
     new_env.each { |k, v| ENV[k.to_s] = v.to_s }
-    # DEnv.logger.debug 'EnvSpecHelpers : before : 2 : ENV      : %s' % ENV.inspect
     example.run
-    # DEnv.logger.debug 'EnvSpecHelpers : after  : 3 : ENV      : %s' % ENV.inspect
     ENV.clear
-    $old_env.each { |k, v| ENV[k] = v }
-    # DEnv.logger.debug 'EnvSpecHelpers : after  : 4 : ENV      : %s' % ENV.inspect
+    old_env.each { |k, v| ENV[k] = v }
   end
+end
+
+RSpec.configure do |config|
+  config.include EnvSpecHelpers, :clean_env
 end

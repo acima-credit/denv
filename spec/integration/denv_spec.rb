@@ -2,9 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe DEnv do
-  include EnvSpecHelpers
-
+RSpec.describe DEnv, :clean_env do
   it('version') { expect(DEnv::VERSION).to eq '0.1.0' }
 
   context 'with', :integration, :clean_env do
@@ -50,7 +48,7 @@ RSpec.describe DEnv do
       end
     end
 
-    context 'change and update only on append', :focus do
+    context 'change and update only on append' do
       shared_examples 'a valid setup and update' do
         it('works') do
           DEnv.append_env!

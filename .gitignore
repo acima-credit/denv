@@ -11,3 +11,5 @@ spec/spec.log
 
 # rspec failure tracking
 .rspec_status
+
+.tool-versions

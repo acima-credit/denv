@@ -1,0 +1,8 @@
+version: '3'
+services:
+  web:
+    image: denv
+    command: ls
+    environment:
+      CI:                     "true"
+      RAILS_ENV:              "test"

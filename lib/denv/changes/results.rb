@@ -29,6 +29,7 @@ class DEnv
 
         DEnv.sources.each do |source|
           next if source.type == 'env'
+
           source.each { |entry| set_entry(source, entry) }
         end
         @values.clear_from_env

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 require 'denv/version'
 
 require 'denv/hash_masker'

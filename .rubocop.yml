@@ -18,3 +18,26 @@ Style/Documentation:
 
 Naming/AccessorMethodName:
   Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+  Exclude:
+    - "spec/**"
+
+Metrics/LineLength:
+  Enabled: false
+  Exclude:
+    - "spec/**"
+
+Lint/UselessComparison:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - _
+    - k
+    - v
+
