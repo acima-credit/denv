@@ -2,9 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe DEnv do
-  include EnvSpecHelpers
-
+RSpec.describe DEnv, :clean_env do
   it('version') { expect(DEnv::VERSION).to eq '0.1.0' }
 
   context 'with', :integration, :clean_env do
