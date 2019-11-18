@@ -185,6 +185,18 @@ RSpec.describe DEnv, :clean_env do
         let(:changes) { new_env.update('B' => '2', 'Y' => 'Y value', 'Z' => 'Z value') }
         let(:env_path) { '../envs/b/.env' }
         let(:local_path) { '../envs/b/.local.env' }
+        let(:credentials_location) { 'test' }
+        let(:application_double) { double(credentials: credentials_double) }
+        let(:credentials_double) { double(read: edited_creds) }
+        let(:rails_double) { double(application: application_double) }
+        let(:edited_creds) do
+          "test:\n" \
+          "  Y: 'Y value'\n" \
+          '  Z: \'Z value\''
+        end
+
+        before { stub_const("Rails", rails_double) }
+
         it 'works', :aggregate_failures do
           DEnv
             .from_file(env_path)

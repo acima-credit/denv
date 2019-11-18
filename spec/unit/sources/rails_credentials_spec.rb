@@ -67,7 +67,8 @@ RSpec.describe DEnv::Sources::RailsCredentials, :unit do
         let(:credentials_location) { 'test' }
 
         it 'reloads but does not return the new edited_creds' do
-          expect(subject.reload).to eq(credentials_hash)
+          expect{subject.reload}
+            .to raise_error('Cannot load credentials outside of Rails')
         end
       end
 

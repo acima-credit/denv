@@ -29,12 +29,16 @@ class DEnv
       private
 
       def load_new_creds
-        return nil if credentials_location.nil? || credentials_location == ''
-        return nil unless Object.const_defined?(:Rails)
-        return nil if ::Rails&.application&.credentials.nil?
+        if credentials_location.nil? || credentials_location == ''
+          return nil
+        elsif !Object.const_defined?(:Rails)
+          raise 'Cannot load credentials outside of Rails'
+        elsif ::Rails&.application&.credentials.nil?
+          raise 'Cannot load credentials when nil'
+        end
 
         hash = YAML.safe_load(::Rails.application.credentials.read)
-        @credentials_hash = hash[credentials_location]
+        @credentials_hash = hash[credentials_location.to_s]
       end
 
       def set_entries
