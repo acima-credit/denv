@@ -13,6 +13,7 @@ require 'denv/sources/set'
 require 'denv/sources/base'
 require 'denv/sources/file'
 require 'denv/sources/consul'
+require 'denv/sources/rails_credentials'
 
 require 'denv/changes/entry'
 require 'denv/changes/set'

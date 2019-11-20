@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe DEnv, :clean_env do
-  it('version') { expect(DEnv::VERSION).to eq '0.1.0' }
+  it('version') { expect(DEnv::VERSION).to eq '0.2.0' }
 
   context 'with', :integration, :clean_env do
     let(:new_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra' } }
@@ -14,6 +14,9 @@ RSpec.describe DEnv, :clean_env do
     let(:local_key) { %(f:#{::File.basename(local_path)}) }
     let(:consul_args) { ['https://consul.some-domain.com/', 'service/some_app/vars/', { user: 'some_user', password: 'some_password' }] }
     let(:consul_key) { 'c:consul.some-domain.com:service/some_app/vars/' }
+    let(:credentials_hash) { { Z: 'Z value', Y: 'Y value' } }
+    let(:credentials_location) { nil }
+    let(:cred_key) { %(c:credentials) }
 
     context 'change and update always' do
       shared_examples 'a valid setup and update' do
@@ -39,11 +42,31 @@ RSpec.describe DEnv, :clean_env do
         let(:exp_env) { new_env.update exp_changes }
         it_behaves_like 'a valid setup and update'
       end
+      context 'rails_credentials' do
+        before { DEnv.from_credentials(credentials_hash, credentials_location: nil) }
+        let(:exp_keys) { [cred_key] }
+        let(:exp_changes) { { 'Z' => 'Z value', 'Y' => 'Y value' } }
+        let(:exp_env) { {} }
+        let(:exp_env) { new_env.update exp_changes }
+        it_behaves_like 'a valid setup and update'
+      end
       context 'both .env and .local.env files' do
         before { DEnv.from_file(env_path).from_file(local_path) }
         let(:exp_keys) { [env_key, local_key] }
         let(:exp_changes) { { 'A' => '1', 'B' => '3', 'C' => '5' } }
         let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5' } }
+        it_behaves_like 'a valid setup and update'
+      end
+      context 'all .env, .local.env and rails_credentials' do
+        before do
+          DEnv
+            .from_file(env_path)
+            .from_file(local_path)
+            .from_credentials(credentials_hash, credentials_location: credentials_location)
+        end
+        let(:exp_keys) { [env_key, local_key, cred_key] }
+        let(:exp_changes) { { 'A' => '1', 'B' => '3', 'C' => '5', 'Y' => 'Y value', 'Z' => 'Z value' } }
+        let(:exp_env) { { 'A' => '1', 'D' => '7', 'E' => 'extra', 'B' => '3', 'C' => '5', 'Y' => 'Y value', 'Z' => 'Z value' } }
         it_behaves_like 'a valid setup and update'
       end
     end
@@ -63,6 +86,11 @@ RSpec.describe DEnv, :clean_env do
       context '.local.env file' do
         before { DEnv.from_file(local_path) }
         let(:exp_env) { new_env.merge 'B' => '3', 'C' => '5' }
+        it_behaves_like 'a valid setup and update'
+      end
+      context 'rails_credentials' do
+        before { DEnv.from_credentials(credentials_hash, credentials_location: credentials_location) }
+        let(:exp_env) { new_env.merge 'Y' => 'Y value', 'Z' => 'Z value' }
         it_behaves_like 'a valid setup and update'
       end
       context 'both .env and .local.env files' do
@@ -100,6 +128,12 @@ RSpec.describe DEnv, :clean_env do
         let(:exp_env) { { 'A' => '7', 'D' => '9', 'E' => 'extra' } }
         it_behaves_like 'a valid update!'
       end
+      context 'rails_credentials' do
+        before { DEnv.from_credentials!(credentials_hash, credentials_location: credentials_location) }
+        let(:exp_keys) { [cred_key] }
+        let(:exp_env) { new_env.merge('Z' => 'Z value', 'Y' => 'Y value') }
+        it_behaves_like 'a valid update!'
+      end
       context 'both .env and .local.env files' do
         before { DEnv.from_file(env_path).from_file!(local_path) }
         let(:exp_keys) { [env_key, local_key] }
@@ -130,19 +164,53 @@ RSpec.describe DEnv, :clean_env do
     end
 
     context 'reload! and reload! and reload!' do
-      let(:new_env) { { 'B' => '0' } }
-      let(:changes) { new_env.update 'B' => '2' }
-      let(:env_path) { '../envs/b/.env' }
-      let(:local_path) { '../envs/b/.local.env' }
-      it 'works' do
-        DEnv.from_file(env_path).from_file!(local_path)
-        expect(ENV.to_hash).to eq(changes)
-        DEnv.reload!
-        expect(ENV.to_hash).to eq(changes)
-        DEnv.reload!
-        expect(ENV.to_hash).to eq(changes)
-        DEnv.reload!
-        expect(ENV.to_hash).to eq(changes)
+      context 'with out rails_credentials' do
+        let(:new_env) { { 'B' => '0' } }
+        let(:changes) { new_env.update 'B' => '2' }
+        let(:env_path) { '../envs/b/.env' }
+        let(:local_path) { '../envs/b/.local.env' }
+        it 'works' do
+          DEnv.from_file(env_path).from_file!(local_path)
+          expect(ENV.to_hash).to eq(changes)
+          DEnv.reload!
+          expect(ENV.to_hash).to eq(changes)
+          DEnv.reload!
+          expect(ENV.to_hash).to eq(changes)
+          DEnv.reload!
+          expect(ENV.to_hash).to eq(changes)
+        end
+      end
+      context 'with rails_credentials' do
+        let(:new_env) { { 'B' => '0' } }
+        let(:changes) { new_env.update('B' => '2', 'Y' => 'Y value', 'Z' => 'Z value') }
+        let(:env_path) { '../envs/b/.env' }
+        let(:local_path) { '../envs/b/.local.env' }
+        let(:credentials_location) { 'test' }
+        let(:application_double) { double(credentials: credentials_double) }
+        let(:credentials_double) { double(read: edited_creds) }
+        let(:rails_double) { double(application: application_double) }
+        let(:edited_creds) do
+          "test:\n" \
+          "  Y: 'Y value'\n" \
+          '  Z: \'Z value\''
+        end
+
+        before { stub_const("Rails", rails_double) }
+
+        it 'works', :aggregate_failures do
+          DEnv
+            .from_file(env_path)
+            .from_file(local_path)
+            .from_credentials!(credentials_hash, credentials_location: credentials_location)
+
+          expect(ENV.to_hash).to eq(changes)
+          DEnv.reload!
+          expect(ENV.to_hash).to eq(changes)
+          DEnv.reload!
+          expect(ENV.to_hash).to eq(changes)
+          DEnv.reload!
+          expect(ENV.to_hash).to eq(changes)
+        end
       end
     end
 
