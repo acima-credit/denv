@@ -31,6 +31,11 @@ class DEnv
         set_entries
       end
 
+      def self.get_root_from_caller(callr)
+        base = callr.first.split(':').first
+        ::File.dirname ::File.expand_path(base)
+      end
+
       private
 
       def add(k, v, time = Time.now)

@@ -7,7 +7,7 @@ class DEnv
 
       def initialize(filename, root = nil, callr = caller)
         @filename = filename
-        root ||= get_root_from_caller callr
+        root ||= Base.get_root_from_caller callr
         @path = Pathname.new(root).join filename
         super()
       end
@@ -43,10 +43,6 @@ class DEnv
         ::File.open(path, 'rb:bom|utf-8', &:read)
       end
 
-      def get_root_from_caller(callr)
-        base = callr.first.split(':').first
-        ::File.dirname ::File.expand_path(base)
-      end
     end
   end
 
