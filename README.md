@@ -134,6 +134,21 @@ DEnv.env!
 DEnv.from_credentials!(credentials)
 ```
 
+### What about loading secrets from a directory?
+
+You can use `#from_secrets_dir` like so:
+```ruby
+# from your Rails app
+DEnv.from_secrets_dir(pathname)
+DEnv.env!
+# or
+DEnv.from_secrets_dir!(pathname)
+```
+
+and it will construct a key/value store where the names of the files in the specified directory will correspond to the
+keys, and the values will be the contents of the files.  The format of the call is the same as loading a file, except
+it will use the directory contents as the items in a key/value hash.
+
 #### Reloading is supported with Rails credentials
 
 ```ruby
