@@ -14,6 +14,7 @@ require 'denv/sources/base'
 require 'denv/sources/file'
 require 'denv/sources/consul'
 require 'denv/sources/rails_credentials'
+require 'denv/sources/secrets_dir'
 
 require 'denv/changes/entry'
 require 'denv/changes/set'
