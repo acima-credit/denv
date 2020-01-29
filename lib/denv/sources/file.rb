@@ -42,7 +42,6 @@ class DEnv
       def body
         ::File.open(path, 'rb:bom|utf-8', &:read)
       end
-
     end
   end
 

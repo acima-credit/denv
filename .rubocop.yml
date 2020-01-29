@@ -4,12 +4,6 @@ AllCops:
     - "**/*.gemspec"
   TargetRubyVersion: 2.4
 
-Metrics/LineLength:
-  AllowURI: true
-  Max: 120
-  Exclude:
-    - Gemfile*
-
 Style/FormatStringToken:
   Enabled: false
 
@@ -27,7 +21,6 @@ Metrics/BlockLength:
 Metrics/LineLength:
   Enabled: false
   Exclude:
-    - "spec/**"
 
 Lint/UselessComparison:
   Enabled: false
@@ -35,7 +28,7 @@ Lint/UselessComparison:
 Metrics/AbcSize:
   Enabled: false
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   AllowedNames:
     - _
     - k

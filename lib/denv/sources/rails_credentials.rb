@@ -28,6 +28,7 @@ class DEnv
 
       private
 
+      # rubocop:disable Style/GuardClause
       def load_new_creds
         if credentials_location.nil? || credentials_location == ''
           return nil
@@ -40,14 +41,15 @@ class DEnv
         hash = YAML.safe_load(::Rails.application.credentials.read)
         @credentials_hash = hash[credentials_location.to_s]
       end
+      # rubocop:enable Style/GuardClause
 
       def set_entries
         if credentials_hash == {}
-          DEnv.logger.error format('DEnv : source  : %-15.15s | %s', key, "could not find credentials")
+          DEnv.logger.error format('DEnv : source  : %-15.15s | %s', key, 'could not find credentials')
           return false
         end
 
-        DEnv.logger.debug format('DEnv : source  : %-15.15s | %s', key, "found credentials")
+        DEnv.logger.debug format('DEnv : source  : %-15.15s | %s', key, 'found credentials')
         credentials_hash.each do |key, value|
           add(key.to_s, value.to_s)
         end
