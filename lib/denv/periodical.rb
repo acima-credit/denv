@@ -36,9 +36,9 @@ end
 begin
   require 'concurrent'
 
-  DEnv.extend ConcurrentReloading
+  DEnv.extend DEnv::ConcurrentReloading
 rescue LoadError
   puts "ERROR: Could not load 'concurrent-ruby', cannot load ENV periodically! ..."
 
-  DEnv.extend NotConcurrentReloading
+  DEnv.extend DEnv::NotConcurrentReloading
 end
