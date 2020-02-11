@@ -13,8 +13,11 @@ describe DEnv::Sources::SecretsDir do
   let(:exp_key) { "s:#{::File.basename(path)}" }
 
   context 'when condition', fakefs: true do
-    let(:path) { Pathname.new(__dir__ + '/../../envs/secrets') }
-    before { FakeFS::FileSystem.clone(path) }
+    let(:path) { Pathname.new(__dir__ + '/../../envs') }
+    before {
+      FakeFS::FileSystem.clone(path)
+      FakeFS::FileUtils.mkdir_p('secrets')
+    }
     context 'succeeds empty' do
       let(:exp_hsh) { {} }
       it_behaves_like 'a valid source'
