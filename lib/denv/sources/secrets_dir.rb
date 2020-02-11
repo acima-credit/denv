@@ -43,7 +43,9 @@ class DEnv
 
       def process_file_secret(secret_name)
         secret_path = @path.join(secret_name)
+
         raise "Secret file #{secret_path} is not accessible" unless ::File.readable?(secret_path)
+        return if ::File.directory?(secret_path)
 
         secret_file = ::File.open(secret_path)
         add secret_name, secret_file.read, secret_file.stat.mtime
