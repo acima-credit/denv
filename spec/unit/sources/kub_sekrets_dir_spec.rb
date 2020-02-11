@@ -14,10 +14,10 @@ describe DEnv::Sources::SecretsDir do
 
   context 'when condition', fakefs: true do
     let(:path) { Pathname.new(__dir__ + '/../../envs') }
-    before {
+    before do
       FakeFS::FileSystem.clone(path)
       FakeFS::FileUtils.mkdir_p('secrets')
-    }
+    end
     context 'succeeds empty' do
       let(:exp_hsh) { {} }
       it_behaves_like 'a valid source'
