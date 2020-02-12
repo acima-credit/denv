@@ -36,7 +36,7 @@ RSpec.describe DEnv::Sources::RailsCredentials, :unit do
         let(:credentials_location) { 'test' }
         let(:exp_hsh) { { 'A' => 2, 'B' => 1 } }
 
-        before { stub_const("Rails", rails_double) }
+        before { stub_const('Rails', rails_double) }
 
         it 'reloads and returns the new edited_creds' do
           expect(subject.reload).to eq(exp_hsh)
@@ -54,7 +54,7 @@ RSpec.describe DEnv::Sources::RailsCredentials, :unit do
         let(:rails_double) { double(application: application_double) }
         let(:credentials_location) { nil }
 
-        before { stub_const("Rails", rails_double) }
+        before { stub_const('Rails', rails_double) }
 
         it 'reloads but does not return the new edited_creds' do
           expect(subject.reload).to eq(credentials_hash)
@@ -67,7 +67,7 @@ RSpec.describe DEnv::Sources::RailsCredentials, :unit do
         let(:credentials_location) { 'test' }
 
         it 'reloads but does not return the new edited_creds' do
-          expect{subject.reload}
+          expect { subject.reload }
             .to raise_error('Cannot load credentials outside of Rails')
         end
       end

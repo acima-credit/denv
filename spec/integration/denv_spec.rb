@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe DEnv, :clean_env do
-  it('version') { expect(DEnv::VERSION).to eq '0.2.0' }
+  it('version') { expect(DEnv::VERSION).to eq '0.3.1' }
 
   context 'with', :integration, :clean_env do
     let(:new_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra' } }
@@ -195,7 +195,7 @@ RSpec.describe DEnv, :clean_env do
           '  Z: \'Z value\''
         end
 
-        before { stub_const("Rails", rails_double) }
+        before { stub_const('Rails', rails_double) }
 
         it 'works', :aggregate_failures do
           DEnv

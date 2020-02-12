@@ -6,6 +6,7 @@ require 'yaml'
 require 'rspec/core/shared_context'
 require 'webmock/rspec'
 require 'vcr'
+require 'fakefs/spec_helpers'
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
@@ -14,6 +15,7 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered     = true
   config.filter_run focus: true if ENV['FOCUS'].to_s == 'true'
   config.expect_with(:rspec) { |c| c.syntax = :expect }
+  config.include FakeFS::SpecHelpers, fakefs: true
 end
 
 case ENV.fetch('DEBUG', 'false')
