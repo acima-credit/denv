@@ -22,7 +22,7 @@ Layout/LineLength:
   Enabled: false
   Exclude:
 
-Lint/UselessComparison:
+Lint/BinaryOperatorWithIdenticalOperands:
   Enabled: false
 
 Metrics/AbcSize:

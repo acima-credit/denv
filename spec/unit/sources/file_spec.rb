@@ -22,6 +22,11 @@ RSpec.describe DEnv::Sources::File, :unit do
       let(:exp_hsh) { { 'A' => '1', 'B' => '2' } }
       it_behaves_like 'a valid source'
     end
+    context 'complex', :focus do
+      let(:path) { '../../envs/a/.complex.env' }
+      let(:exp_hsh) { { 'D' => 'X=1&Z=2', 'LDAP_USERNAME' => 'CN=Finance Portal,OU=Users' } }
+      it_behaves_like 'a valid source'
+    end
   end
   context 'not found' do
     let(:exp_hsh) { {} }
