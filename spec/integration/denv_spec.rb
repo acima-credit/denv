@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe DEnv, :clean_env do
-  it('version') { expect(DEnv::VERSION).to eq '0.3.1' }
+  it('version') { expect(DEnv::VERSION).to eq '0.3.2' }
 
   context 'with', :integration, :clean_env do
     let(:new_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra' } }
@@ -222,6 +222,28 @@ RSpec.describe DEnv, :clean_env do
         expect(DEnv.safe_changes('a')).to eq(exp_safe_changes)
         expect(DEnv.changes).to eq(exp_changes)
         expect(DEnv.safe_changes('a')).to eq(exp_safe_changes)
+      end
+    end
+
+    context 'repeat files' do
+      let(:env_path) { '../envs/c/.env' }
+      let(:local_path) { '../envs/c/.local.env' }
+      context 'separately' do
+        let(:first_merged_changes) { new_env.merge 'C' => '2' }
+        let(:second_merged_changes) { new_env.merge 'C' => '1' }
+        it 'respects the files and order' do
+          DEnv.from_file(env_path).from_file!(local_path)
+          expect(ENV.to_hash).to eq(first_merged_changes)
+          DEnv.from_file!(env_path)
+          expect(ENV.to_hash).to eq(second_merged_changes)
+        end
+      end
+      context 'together' do
+        let(:exp_changes) { new_env.merge 'C' => '1' }
+        it 'respects the files and order' do
+          DEnv.from_file(env_path).from_file(local_path).from_file!(env_path)
+          expect(ENV.to_hash).to eq(exp_changes)
+        end
       end
     end
 
