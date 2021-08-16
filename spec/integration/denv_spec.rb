@@ -191,8 +191,8 @@ RSpec.describe DEnv, :clean_env do
         let(:rails_double) { double(application: application_double) }
         let(:edited_creds) do
           "test:\n" \
-          "  Y: 'Y value'\n" \
-          '  Z: \'Z value\''
+            "  Y: 'Y value'\n" \
+            '  Z: \'Z value\''
         end
 
         before { stub_const('Rails', rails_double) }
