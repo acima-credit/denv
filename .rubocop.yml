@@ -1,8 +1,9 @@
 AllCops:
   DisplayCopNames: true
+  NewCops: enable
   Exclude:
     - "**/*.gemspec"
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
 
 Style/FormatStringToken:
   Enabled: false

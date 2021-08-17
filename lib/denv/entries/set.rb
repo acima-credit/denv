@@ -12,8 +12,8 @@ class DEnv
         @all = {}
       end
 
-      def each
-        values.each { |x| yield x }
+      def each(&block)
+        values.each(&block)
       end
 
       def get(key)
@@ -26,7 +26,7 @@ class DEnv
         return false if entry.invalid?
 
         found = get entry.key
-        return false if found&.eql?(entry)
+        return false if found.eql?(entry)
 
         @all[entry.key] = entry
       end

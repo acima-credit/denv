@@ -80,7 +80,7 @@ class DEnv
     end
 
     def logger
-      @logger ||= Logger.new(STDOUT).tap { |x| x.level = Logger::INFO }
+      @logger ||= Logger.new($stdout).tap { |x| x.level = Logger::INFO }
     end
 
     attr_writer :logger

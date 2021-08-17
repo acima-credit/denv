@@ -76,6 +76,19 @@ DEnv.reload.env!
 DEnv.reload!
 ```
 
+### Can I call the same source multiple times?
+
+Yes, you can! It will only make sense if you do something with the new envs in the mean time but it is very doable.
+
+ ```ruby
+DEnv.from_file('../.env').from_file!('../.local.env')
+# do something with that custom env set
+SomethingVeryClever.run!
+# and then bring back the original env set
+DEnv.from_file!('../.env')
+SomethingUtterlyClever.run!
+```
+
 ### What if I'm really clever?
 
 Yes, you can use the newly found environment variables for the next step. Something like:
