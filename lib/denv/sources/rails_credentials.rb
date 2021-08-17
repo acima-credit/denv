@@ -9,7 +9,7 @@ class DEnv
       attr_reader :credentials_hash, :credentials_location
 
       def initialize(credentials_hash, credentials_location)
-        super
+        super()
         @credentials_hash = credentials_hash || {}
         @credentials_location = credentials_location
       end
