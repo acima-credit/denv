@@ -2,7 +2,7 @@
 
 class DEnv
   class Changes
-    class Set < SimpleDelegator
+    class Set < ::SimpleDelegator
       def initialize
         super []
       end
