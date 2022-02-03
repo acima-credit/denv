@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "delegate"
+
 class DEnv
   class Changes
     class Set < SimpleDelegator
