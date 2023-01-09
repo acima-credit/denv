@@ -26,9 +26,9 @@ RSpec.describe DEnv::Sources::RailsCredentials, :unit do
     context 'in a rails application' do
       context 'with credentials_location' do
         let(:edited_creds) do
-          "test:\n" \
-            "  A: 2\n" \
-            '  B: 1'
+          "test:\n  " \
+            "A: 2\n  " \
+            'B: 1'
         end
         let(:application_double) { double(credentials: credentials_double) }
         let(:credentials_double) { double(read: edited_creds) }
@@ -45,9 +45,9 @@ RSpec.describe DEnv::Sources::RailsCredentials, :unit do
 
       context 'without credentials_location' do
         let(:edited_creds) do
-          "test:\n" \
-            "  A: 2\n" \
-            '  B: 1'
+          "test:\n  " \
+            "A: 2\n  " \
+            'B: 1'
         end
         let(:application_double) { double(credentials: credentials_double) }
         let(:credentials_double) { double(read: edited_creds) }
