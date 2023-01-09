@@ -5,6 +5,8 @@ class DEnv
     class Hash < Base
       def initialize(hash)
         @hash = hash
+        raise StandardError, "Error - expecting a hash parameter" unless hash.is_a?(::Hash)
+
         super()
       end
 
