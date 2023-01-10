@@ -3,15 +3,15 @@
 require 'spec_helper'
 
 RSpec.describe DEnv, :clean_env do
-  it('version') { expect(DEnv::VERSION).to eq '0.3.4' }
+  it('version') { expect(DEnv::VERSION).to eq '0.3.5' }
 
   context 'with', :integration, :clean_env do
     let(:new_env) { { 'A' => '8', 'D' => '7', 'E' => 'extra' } }
     let(:nv_key) { 'env' }
     let(:env_path) { '../envs/a/.env' }
-    let(:env_key) { %(f:#{::File.basename(env_path)}) }
+    let(:env_key) { %(f:#{File.basename(env_path)}) }
     let(:local_path) { '../envs/a/.local.env' }
-    let(:local_key) { %(f:#{::File.basename(local_path)}) }
+    let(:local_key) { %(f:#{File.basename(local_path)}) }
     let(:consul_args) { ['https://consul.some-domain.com/', 'service/some_app/vars/', { user: 'some_user', password: 'some_password' }] }
     let(:consul_key) { 'c:consul.some-domain.com:service/some_app/vars/' }
     let(:credentials_hash) { { Z: 'Z value', Y: 'Y value' } }
@@ -190,9 +190,9 @@ RSpec.describe DEnv, :clean_env do
         let(:credentials_double) { double(read: edited_creds) }
         let(:rails_double) { double(application: application_double) }
         let(:edited_creds) do
-          "test:\n" \
-            "  Y: 'Y value'\n" \
-            '  Z: \'Z value\''
+          "test:\n  " \
+            "Y: 'Y value'\n  " \
+            'Z: \'Z value\''
         end
 
         before { stub_const('Rails', rails_double) }
@@ -252,10 +252,10 @@ RSpec.describe DEnv, :clean_env do
       before { DEnv.strip_env! }
       it 'strips keys and values' do
         expect(ENV.keys.sort).to eq %w[A D E F]
-        expect(ENV['A']).to eq '8'
-        expect(ENV['D']).to eq '7'
-        expect(ENV['E']).to eq 'extra'
-        expect(ENV['F']).to eq '1'
+        expect(ENV.fetch('A')).to eq '8'
+        expect(ENV.fetch('D')).to eq '7'
+        expect(ENV.fetch('E')).to eq 'extra'
+        expect(ENV.fetch('F')).to eq '1'
       end
     end
 

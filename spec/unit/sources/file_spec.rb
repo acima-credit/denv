@@ -8,7 +8,7 @@ RSpec.describe DEnv::Sources::File, :unit do
   let(:root) { nil }
   subject { described_class.new path, root }
   let(:exp_type) { 'file' }
-  let(:exp_key) { "f:#{::File.basename(path)}" }
+  let(:exp_key) { "f:#{File.basename(path)}" }
 
   context 'found' do
     context 'without root' do

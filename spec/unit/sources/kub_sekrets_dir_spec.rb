@@ -10,7 +10,7 @@ describe DEnv::Sources::SecretsDir do
   subject { described_class.new path }
 
   let(:exp_type) { 'secrets_dir' }
-  let(:exp_key) { "s:#{::File.basename(path)}" }
+  let(:exp_key) { "s:#{File.basename(path)}" }
 
   context 'when condition', fakefs: true do
     let(:path) { Pathname.new("#{__dir__}/../../envs") }
@@ -40,10 +40,10 @@ describe DEnv::Sources::SecretsDir do
         it_behaves_like 'a valid source'
         it 'handles the updated file' do
           DEnv.from_secrets_dir! path
-          expect(ENV[file_name]).to eq value
+          expect(ENV.fetch(file_name)).to eq value
           File.write("#{path}/#{file_name}", new_value)
           DEnv.reload!
-          expect(ENV[exp_hsh.keys.first]).to eq new_value
+          expect(ENV.fetch(exp_hsh.keys.first)).to eq new_value
         end
         it 'has one deleted key' do
           secrets = DEnv::Sources::SecretsDir.new(path)
@@ -58,7 +58,7 @@ describe DEnv::Sources::SecretsDir do
         before { File.write("#{path}/#{exp_hsh.keys.first}", value) }
         it 'deals with an empty secrets sub file' do
           DEnv.from_secrets_dir! path
-          expect(ENV[file_name]).to eq value
+          expect(ENV.fetch(file_name)).to eq value
         end
         context 'fails with bad file access permissions' do
           context 'fails with missing directory' do

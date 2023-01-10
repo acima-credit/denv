@@ -20,9 +20,9 @@ RSpec.describe DEnv::Entries::Entry, :unit do
       it { expect(subject.eql?(other)).to be_falsey }
       it { expect(subject.eql?(another)).to be_falsey }
       # ordering
-      it { expect(subject.<=>(subject)).to eq 0 }
-      it { expect(subject.<=>(other)).to eq 0 }
-      it { expect(subject.<=>(another)).to eq 1 }
+      it { expect(subject <=> (subject)).to eq 0 }
+      it { expect(subject <=> (other)).to eq 0 }
+      it { expect(subject <=> (another)).to eq 1 }
       # validity
       it { expect(subject).to be_valid }
       it { expect(subject).to_not be_invalid }
@@ -46,7 +46,7 @@ RSpec.describe DEnv::Entries::Entry, :unit do
       end
       context 'unescape characters' do
         let(:value) { 'S0me#alu3' }
-        subject { described_class.new key, "S0me\#alu3" }
+        subject { described_class.new key, 'S0me#alu3' }
         it { expect(subject.key).to eq key }
         it { expect(subject.value).to eq value }
       end
